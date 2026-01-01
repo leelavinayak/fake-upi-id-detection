@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeonGuard | AI UPI Validator + Report System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    <div class="container">
+        <div class="header-neon">
+            <h1 class="neon-title">PRUSHING DETECTION</h1>
+            <p class="subtitle">UPI Security Validation System</p>
+        </div>
+        
+        <div class="main-grid">
+            <!-- Main Scanner Section -->
+            <div class="scanner-card">
+                <div class="scanner-header">
+                    <i class="fas fa-satellite-dish scanner-icon"></i>
+                    <h2 class="scanner-title">Quantum UPI Scanner</h2>
+                </div>
+                
+                <div class="input-container">
+                    <i class="fas fa-fingerprint input-icon"></i>
+                    <input type="text" id="upiInput" class="neon-input" placeholder="ENTER UPI ID (e.g., username@bank)" autocomplete="off">
+                </div>
+                
+                <div class="button-group">
+                    <button class="scan-button" id="scanButton">
+                        <i class="fas fa-bolt"></i> INITIATE QUANTUM SCAN
+                    </button>
+                    <button class="report-button" id="openReportModal">
+                        <i class="fas fa-flag"></i> REPORT SCAM
+                    </button>
+                </div>
+                
+                <div class="result-display" id="resultDisplay">
+                    <div class="result-header">
+                        <div class="result-left">
+                            <i class="fas fa-shield-alt result-icon" id="resultIcon"></i>
+                            <div class="result-title" id="resultTitle">ANALYSIS COMPLETE</div>
+                        </div>
+                        <button class="report-scam-btn" id="reportCurrentScam">
+                            <i class="fas fa-exclamation-triangle"></i> REPORT THIS SCAM
+                        </button>
+                    </div>
+                    
+                    <p class="result-message" id="resultMessage"></p>
+                    
+                    <div class="ai-analysis">
+                        <div class="analysis-title">
+                            <i class="fas fa-brain"></i>
+                            AI SECURITY ANALYSIS
+                        </div>
+                        <div class="analysis-content" id="analysisContent"></div>
+                    </div>
+                    
+                    <div class="trust-score" id="trustScore">TRUST SCORE: 100%</div>
+                </div>
+            </div>
+            
+            <!-- Reports Panel -->
+            <div class="reports-panel">
+                <div class="reports-header">
+                    <h2 class="reports-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        SCAM REPORTS
+                    </h2>
+                    <div class="reports-count" id="reportsCount">0</div>
+                </div>
+                
+                <div class="reports-list" id="reportsList">
+                    <div class="no-reports">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                        <p>No scam reports yet</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">Be the first to report a scam!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-test">
+            <div class="test-card test-safe" data-upi="secure@paytm">
+                <div class="test-label">VALID EXAMPLE</div>
+                <div class="test-value safe-value">secure@paytm</div>
+            </div>
+            
+            <div class="test-card test-safe" data-upi="merchant@ybl">
+                <div class="test-label">VALID EXAMPLE</div>
+                <div class="test-value safe-value">merchant@ybl</div>
+            </div>
+            
+            <div class="test-card test-danger" data-upi="support@scammer">
+                <div class="test-label">SCAM ALERT</div>
+                <div class="test-value danger-value">support@scammer</div>
+            </div>
+            
+            <div class="test-card test-danger" data-upi="refund@fakebank">
+                <div class="test-label">SCAM ALERT</div>
+                <div class="test-value danger-value">refund@fakebank</div>
+            </div>
+        </div>
+        
+        <div class="footer-neon">
+            NEONGUARD AI v2.0 | QUANTUM SECURITY PROTOCOL ACTIVE
+        </div>
+    </div>
+    
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-exclamation-triangle modal-icon"></i>
+                <h2 class="modal-title">REPORT SUSPICIOUS UPI</h2>
+            </div>
+            <form id="reportForm">
+                <div class="form-group">
+                    <label class="form-label">Enter user name:</label>
+                    <input type="text" id="reportUpiInput" class="form-input" placeholder="Enter user name" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Enter user Email id:</label>
+                    <input type="text" id="reportUpiInput" class="form-input" placeholder="Enter user Email id" name="usermail" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Enter scammed UPI ID:</label>
+                    <input type="text" id="scammedmail" class="form-input" placeholder="Enter scammed UPI ID" name="Scammedmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Enter police station Email id:</label>
+                    <input type="text" id="reportUpiInput" class="form-input" placeholder="Enter police station email id" name="recipient" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Scam Type:</label>
+                    <select id="scamType" class="form-input" name="subject" required>
+                        <option value="">Select type of scam</option>
+                        <option value="phishing">Phishing Attempt</option>
+                        <option value="fake_refund">Fake Refund</option>
+                        <option value="impersonation">Impersonation</option>
+                        <option value="unknown_provider">Unknown Provider</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description:</label>
+                    <textarea id="scamDescription" class="form-textarea" placeholder="Describe what happened or why you think this is a scam..." name="message" required></textarea>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="submit" class="submit-btn" href="https://cybercrime.gov.in/Webform/Crime_AuthoLogin.aspx">
+                        <i class="fas fa-paper-plane"></i> SUBMIT REPORT
+                    </button>
+                    <button type="button" class="cancel-btn" id="closeReportModal">
+                        <i class="fas fa-times"></i> CANCEL
+                    </button>
+                </div>
+            </form>
+        
+<!--
+        <form id="reportForm">
+                <div class="form-group">
+                    <label class="form-label">Enter police station Email id:</label>
+                    <input type="text" id="reportUpiInput" class="form-input" placeholder="Enter police station email id" name="recipient" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Scam Type:</label>
+                    <select id="scamType" class="form-input" name="subject" required>
+                        <option value="">Select type of scam</option>
+                        <option value="phishing">Phishing Attempt</option>
+                        <option value="fake_refund">Fake Refund</option>
+                        <option value="impersonation">Impersonation</option>
+                        <option value="unknown_provider">Unknown Provider</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description:</label>
+                    <textarea id="scamDescription" class="form-textarea" placeholder="Describe what happened or why you think this is a scam... and enter the upi id to block it." name="message" required></textarea>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="submit" class="submit-btn"></button>>
+                        <i class="fas fa-paper-plane"></i> SUBMIT REPORT
+                    </button>
+                    <button type="button" class="cancel-btn" id="closeReportModal">
+                        <i class="fas fa-times"></i> CANCEL
+                    </button>
+                </div>
+            </form>-->
+        </div>
+    </div>
+    
+    <!-- Scanning Overlay -->
+    <div class="scanning-overlay" id="scanningOverlay">
+        <div class="scanning-text">QUANTUM SCANNING IN PROGRESS...</div>
+        <div class="scanner-beam"></div>
+        <div class="scanning-text" style="margin-top: 40px; font-size: 1.2rem;">
+            Analyzing cryptographic patterns...
+        </div>
+    </div>
+
+    <script>
+
+
+        const form = document.getElementById('reportForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new URLSearchParams(new FormData(form));
+
+      const response = await fetch('http://localhost:3000/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData
+      });
+      
+      const text = await response.text();
+      alert(text);
+    });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const upiInput = document.getElementById('upiInput');
+            const scanButton = document.getElementById('scanButton');
+            const resultDisplay = document.getElementById('resultDisplay');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            const analysisContent = document.getElementById('analysisContent');
+            const trustScore = document.getElementById('trustScore');
+            const scanningOverlay = document.getElementById('scanningOverlay');
+            const reportCurrentScam = document.getElementById('reportCurrentScam');
+            const reportsList = document.getElementById('reportsList');
+            const reportsCount = document.getElementById('reportsCount');
+            
+            // Modal Elements
+            const openReportModal = document.getElementById('openReportModal');
+            const closeReportModal = document.getElementById('closeReportModal');
+            const reportModal = document.getElementById('reportModal');
+            const reportForm = document.getElementById('reportForm');
+            const reportUpiInput = document.getElementById('reportUpiInput');
+            const scamType = document.getElementById('scamType');
+            const scamDescription = document.getElementById('scamDescription');
+            
+            // Trusted Providers (not displayed)
+            const trustedProviders = [
+                "@paytm", "@ybl", "@oksbi", "@ibl", "@axl", 
+                "@upi", "@phonepe", "@googlepay", "@amazonpay"
+            ];
+            
+            // Reports Data (stored in localStorage)
+            let scamReports = JSON.parse(localStorage.getItem('neonguard_reports')) || [];
+            
+            // AI analysis messages
+            const safeMessages = [
+                "Quantum validation confirms this UPI ID uses a legitimate payment gateway.",
+                "Blockchain analysis shows this UPI pattern is verified and secure.",
+                "AI neural network confirms this UPI ID follows trusted provider protocols.",
+                "Cryptographic signature validation successful - this UPI is authentic."
+            ];
+            
+            const dangerMessages = [
+                "⚠ ALERT: This UPI ID does not match any trusted payment providers!",
+                "⚠ WARNING: Quantum scanner detected unverified payment gateway!",
+                "⚠ THREAT DETECTED: This UPI pattern is not registered in secure databases!",
+                "⚠ SECURITY BREACH: AI analysis confirms this UPI uses unknown providers!"
+            ];
+            
+            // Initialize
+            updateReportsDisplay();
+            
+            // UPI Scanning Function
+            function checkUPI() {
+                const upiId = upiInput.value.trim().toLowerCase();
+                
+                if (!upiId) {
+                    alert("Please enter a UPI ID for quantum analysis");
+                    upiInput.focus();
+                    return;
+                }
+                
+                // Show scanning animation
+                scanningOverlay.style.display = 'flex';
+                
+                // Simulate quantum scanning
+                setTimeout(() => {
+                    scanningOverlay.style.display = 'none';
+                    performAnalysis(upiId);
+                }, 2000);
+            }
+            
+            function performAnalysis(upiId) {
+                // Check if UPI has @ symbol
+                if (!upiId.includes('@')) {
+                    showResult('danger', 
+                        'INVALID FORMAT', 
+                        `"${upiId}" does not contain a valid @ symbol. Quantum scanning aborted.`,
+                        'Neural network detected malformed UPI structure. This pattern is not recognized by any payment system.'
+                    );
+                    return;
+                }
+                
+                // Extract provider from UPI ID
+                const provider = '@' + upiId.split('@')[1];
+                
+                // Check if provider is trusted
+                let isSafe = false;
+                for (let trustedProvider of trustedProviders) {
+                    if (provider === trustedProvider.toLowerCase()) {
+                        isSafe = true;
+                        break;
+                    }
+                }
+                
+                // Generate analysis
+                if (isSafe) {
+                    const safeMsg = safeMessages[Math.floor(Math.random() * safeMessages.length)];
+                    showResult('safe',
+                        'SECURE UPI VERIFIED',
+                        `"${upiId.toUpperCase()}" is confirmed as a legitimate payment address.`,
+                        safeMsg
+                    );
+                    reportCurrentScam.style.display = 'none';
+                } else {
+                    const dangerMsg = dangerMessages[Math.floor(Math.random() * dangerMessages.length)];
+                    showResult('danger',
+                        'SCAM ALERT ACTIVATED',
+                        `"${upiId.toUpperCase()}" uses an unverified payment gateway - POTENTIAL FRAUD!`,
+                        `${dangerMsg}\n\nProvider "${provider}" is not registered with any secure payment network.`
+                    );
+                    reportCurrentScam.style.display = 'flex';
+                }
+            }
+            
+            function showResult(type, title, message, analysis) {
+                // Set display style
+                resultDisplay.className = `result-display result-${type}`;
+                resultDisplay.style.display = 'block';
+                
+                // Set icon and colors
+                resultIcon.className = `fas fa-${type === 'safe' ? 'shield-alt' : 'exclamation-triangle'} result-icon ${type}-icon`;
+                resultTitle.className = `result-title ${type}-title`;
+                resultTitle.textContent = title;
+                
+                // Set messages
+                resultMessage.textContent = message;
+                analysisContent.textContent = analysis;
+                
+                // Set trust score
+                trustScore.className = `trust-score ${type}-score`;
+                trustScore.textContent = `TRUST SCORE: ${type === 'safe' ? '100%' : '0%'}`;
+                
+                // Add visual effects
+                if (type === 'danger') {
+                    resultDisplay.style.animation = 'fadeIn 0.5s ease';
+                    setTimeout(() => {
+                        resultDisplay.style.animation = 'none';
+                    }, 500);
+                }
+                
+                // Scroll to result
+                resultDisplay.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Report System Functions
+            function openModal(upiId = '') {
+                scammedmail.value = upiId;
+                scamType.value = '';
+                scamDescription.value = '';
+                reportModal.classList.add('active');
+            }
+            
+            function closeModal() {
+                reportModal.classList.remove('active');
+            }
+            
+            async function submitReport(e){
+                e.preventDefault();
+                
+                const upiId = scammedmail.value.trim().toLowerCase();
+                const type = scamType.value;
+                const description = scamDescription.value.trim();
+                
+                if (!upiId || !type || !description) {
+                    alert("Please fill in all fields");
+                    return;
+                }
+                
+                // Create new report
+                const newReport = {
+                    id: Date.now(),
+                    upiId: upiId,
+                    type: type,
+                    description: description,
+                    date: new Date().toLocaleString(),
+                    status: 'pending',
+                    reviewed: false
+                };
+                
+                // Add to reports array
+                scamReports.unshift(newReport);
+                
+                // Save to localStorage
+                localStorage.setItem('neonguard_reports', JSON.stringify(scamReports));
+                
+                // Update display
+                updateReportsDisplay();
+                
+                // Show success message
+                
+                //await alert('Thank you! Your report has been submitted. Our security team will review it.');
+                await alert('Redirecting to cyber crime reporting portal for futher actions.');
+                window.location.href="https://cybercrime.gov.in/Webform/Crime_AuthoLogin.aspx";
+                
+                // Close modal
+                closeModal();
+            }
+            
+            function updateReportsDisplay() {
+                // Update count
+                reportsCount.textContent = scamReports.length;
+                
+                // Clear current list
+                reportsList.innerHTML = '';
+                
+                if (scamReports.length === 0) {
+                    // Show no reports message
+                    reportsList.innerHTML = `
+                        <div class="no-reports">
+                            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                            <p>No scam reports yet</p>
+                            <p style="font-size: 0.9rem; margin-top: 10px;">Be the first to report a scam!</p>
+                        </div>
+                    `;
+                } else {
+                    // Add each report
+                    scamReports.forEach(report => {
+                        const reportItem = document.createElement('div');
+                        reportItem.className = 'report-item';
+                        
+                        let statusClass = 'status-pending';
+                        let statusText = 'PENDING REVIEW';
+                        
+                        if (report.status === 'reviewed') {
+                            statusClass = 'status-reviewed';
+                            statusText = 'UNDER REVIEW';
+                        } else if (report.status === 'blocked') {
+                            statusClass = 'status-blocked';
+                            statusText = 'BLOCKED';
+                        }
+                        
+                        reportItem.innerHTML = `
+                            <div class="report-upi">
+                                <i class="fas fa-skull-crossbones"></i>
+                                ${report.upiId.toUpperCase()}
+                            </div>
+                            <div class="analysis-content" style="font-size: 0.9rem;">
+                                ${report.description.length > 100 ? report.description.substring(0, 100) + '...' : report.description}
+                            </div>
+                            <div class="report-details">
+                                <div>${report.type.replace('_', ' ').toUpperCase()}</div>
+                                <div>${report.date}</div>
+                                <div class="report-status ${statusClass}">${statusText}</div>
+                            </div>
+                        `;
+                        
+                        reportsList.appendChild(reportItem);
+                    });
+                }
+            }
+            
+            // Event Listeners
+            scanButton.addEventListener('click', checkUPI);
+            
+            upiInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkUPI();
+                }
+            });
+            
+            // Report Current Scam Button
+            reportCurrentScam.addEventListener('click', function() {
+                openModal(upiInput.value);
+            });
+            
+            // Open Report Modal Button
+            openReportModal.addEventListener('click', function() {
+                openModal('');
+            });
+            
+            // Close Modal Buttons
+            closeReportModal.addEventListener('click', closeModal);
+            
+            // Close modal when clicking outside
+            reportModal.addEventListener('click', function(e) {
+                if (e.target === reportModal) {
+                    closeModal();
+                }
+            });
+            
+            // Submit Report Form
+            reportForm.addEventListener('submit', submitReport);
+            
+            // Example cards click handlers
+            document.querySelectorAll('.test-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const upi = this.getAttribute('data-upi');
+                    upiInput.value = upi;
+                    checkUPI();
+                });
+            });
+            
+            // Auto-scan on page load
+            setTimeout(() => {
+                upiInput.value = 'merchant@ybl';
+                checkUPI();
+            }, 1000);
+            
+            // Add typing effect to input placeholder
+            let placeholders = [
+                "username@paytm",
+                "merchant@ybl", 
+                "customer@oksbi",
+                "payment@phonepe"
+            ];
+            let currentIndex = 0;
+            
+            function cyclePlaceholder() {
+                upiInput.placeholder = placeholders[currentIndex];
+                currentIndex = (currentIndex + 1) % placeholders.length;
+            }
+            
+            setInterval(cyclePlaceholder, 2000);
+            
+            // Add sample reports for demo
+            if (scamReports.length === 0) {
+                scamReports = [
+                    {
+                        id: 1,
+                        upiId: "support@paytmm",
+                        type: "phishing",
+                        description: "Received this UPI for tech support refund. Misspelled 'paytm' as 'paytmm'.",
+                        date: "2023-10-15 14:30",
+                        status: "blocked",
+                        reviewed: true
+                    },
+                    {
+                        id: 2,
+                        upiId: "refund@ic1cibank",
+                        type: "impersonation",
+                        description: "Claimed to be ICICI Bank refund department. 'ic1ci' instead of 'icici'.",
+                        date: "2023-10-10 09:15",
+                        status: "reviewed",
+                        reviewed: true
+                    },
+                    {
+                        id: 3,
+                        upiId: "cashback@fakepay",
+                        type: "fake_refund",
+                        description: "Promised cashback for payment. Unknown provider '@fakepay'.",
+                        date: "2023-10-05 16:45",
+                        status: "pending",
+                        reviewed: false
+                    }
+                ];
+                localStorage.setItem('neonguard_reports', JSON.stringify(scamReports));
+                updateReportsDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
